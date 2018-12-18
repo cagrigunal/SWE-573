@@ -18,10 +18,10 @@ class TestTweets(TestCase):
 class TestTwitterConnection(TestCase):
     def test_getInstance(self):
         from stocks.views import StdOutListener
-        consumer_key = "XXdVWTaTgOkR0AHaE1SOG1fWa"
-        consumer_secret = "MH7ZWKMoiSjnw0kZweLpKzTlSXjpVE27aZfuJsI8twC3Jm7VOH"
-        access_token = "28985708-GTz8sReJqi039EaadKljnbxQYu6gPk4n810bCjFDa"
-        access_token_secret = "J4cOQ4KZwOtyN9LUIBz2h69F56fGnWWyNV3OXLaRt0MuS"
+        consumer_key = "X"
+        consumer_secret = "X"
+        access_token = "X"
+        access_token_secret = "X"
         l = StdOutListener()
         auth = OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
