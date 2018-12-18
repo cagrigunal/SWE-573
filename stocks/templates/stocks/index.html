@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title>TweetStock</title>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/core.js"></script>
+</head>
+<body>
+        <canvas id="myChart" width="1800" height="400"></canvas>
+        <ul>
+            {% for tweet in tweets %}
+        <li>{{tweet.tweet_text}}  -------- {{tweet.pub_date}}</li>
+            {% endfor %}
+        </ul>
+</body>
+</html>
+
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+
+<script type="text/javascript">
+    
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        
+        datasets: [
+        {
+            label: 'Tweets',
+            data: [{
+                x: 1,
+                y: 2
+            }, {
+                x: 2,
+                y: 7
+            },
+            {
+                x: 3,
+                y: 19
+            }, {
+                x: 4,
+                y: 24
+            },
+            {
+                x: 5,
+                y: 25
+            }, {
+                x: 6,
+                y: 12
+            },
+            {
+                x: 7,
+                y: 4
+            }, {
+                x: 8,
+                y: 14
+            }
+            ],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(0,0,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        },   
+            
+            
+            {
+                label: 'Stocks',
+            data: [{
+                x: 1,
+                y: 10
+            }, {
+                x: 2,
+                y: 5
+            },
+            {
+                x: 3,
+                y: 15
+            }, {
+                x: 4,
+                y: 24
+            },
+            {
+                x: 5,
+                y: 12
+            }, {
+                x: 6,
+                y: 12
+            },
+            {
+                x: 7,
+                y: 11
+            }, {
+                x: 8,
+                y: 25
+            }
+            ],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom'
+            }]
+        },
+        responsive: false,
+    }
+});
+
+
+</script>

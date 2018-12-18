@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-
+from django.template import loader
 # Import modules
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
@@ -22,7 +22,10 @@ from threading import Thread
 from multiprocessing import Process
 from time import sleep
 from django.utils import timezone
+import requests
+import json
 
+      
 
 
 
@@ -40,10 +43,33 @@ class StdOutListener(StreamListener):
     This is a basic listener that just prints received tweets to stdout.
     """
     def on_status(self, status):
-        print(status.text)
-        t = Tweet(tweet_text=status.text, pub_date=timezone.now())
-        t.save()
-        print(Tweet.objects.all())
+        text = ''
+        # Try for extended text of an original tweet, if RT'd (REST API)
+        try: text = status.retweeted_status['full_text']
+        except:
+            # Try for extended text of an original tweet (streamer)
+            try: text = status.extended_tweet['full_text']
+            except:
+                # Try for extended text of an original tweet (REST API)
+                try: text = status.full_text
+                except:
+                    # Try for basic text of original tweet if RT'd 
+                    try: text = status.retweeted_status['text']
+                    except:
+                        # Try for basic text of an original tweet
+                        try: text = status.text
+                        except: 
+                            # Nothing left to check for
+                            text = ''
+        
+        
+        if(status.lang!='de'):
+            #print(status.lang)
+            
+            t = Tweet(tweet_text=status.text, pub_date=timezone.now())
+            t.save()
+            
+       
         return True
 
     def on_error(self, status_code):
@@ -52,22 +78,46 @@ class StdOutListener(StreamListener):
 
 
 def nested():
+    #response = json.loads(requests.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=OMBGDV75LSVPD38K").text)
+    #print(response)
     l = StdOutListener()
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     stream = Stream(auth, l, tweet_mode='extended')
    
-    stream.filter(track=['gerel', 'asels','bist'], is_async=True)
+    stream.filter(track=['asels'], is_async=True)
     
    
-
+def posTweet(tweets):
+    tweetList=[]
+    for tweet in tweets:
+        if tweet.pub_date.strftime("%d")==timezone.now().strftime("%d"):
+            OKlist = ('günler','güzel','hayrola','yükşeliş','paragirişi','PARAGİRİŞİ','+','yukari','alacagim','kazan','kazanir','harika')
+            if any(s in tweet.tweet_text for s in OKlist):
+                tweetList.append(tweet)
+    return tweetList
 
 
 
 def index(request): 
     nested()
+    tweets=Tweet.objects.all()
+    posTweets=posTweet(tweets)
+    hourly=[]
+    for tweet in posTweets:
+        hourly.append(tweet.pub_date.strftime("%H"))
+    d = {x:hourly.count(x) for x in hourly}
+    print(d)
 
-    return HttpResponse("Hello, world. Yow You're at the polls index.")
+    
+            
+        #print(print(tweet.tweet_text.split()))
+    template = loader.get_template("stocks/index.html")
+    context = {
+        'tweets' :posTweet(tweets)
+    }
+    
+    return HttpResponse(template.render(context, request))
 
 
 
