@@ -1,0 +1,11 @@
+ul{
+    list-style: none;
+    overflow: scroll;
+    overflow-x: hidden;
+    height: 600px;
+}
+
+li{
+    margin: 20px;
+    border: 1px black solid;
+}

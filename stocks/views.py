@@ -30,10 +30,10 @@ import json
 
 
 # Your credentials go here
-consumer_key = "a"
-consumer_secret = "b"
-access_token = "c"
-access_token_secret = "d"
+consumer_key = "XXdVWTaTgOkR0AHaE1SOG1fWa"
+consumer_secret = "MH7ZWKMoiSjnw0kZweLpKzTlSXjpVE27aZfuJsI8twC3Jm7VOH"
+access_token = "28985708-GTz8sReJqi039EaadKljnbxQYu6gPk4n810bCjFDa"
+access_token_secret = "J4cOQ4KZwOtyN9LUIBz2h69F56fGnWWyNV3OXLaRt0MuS"
 
 """
 The code for our listener class above goes here!
@@ -68,6 +68,7 @@ class StdOutListener(StreamListener):
             
             t = Tweet(tweet_text=status.text, pub_date=timezone.now())
             t.save()
+            print(t.tweet_text)
             
        
         return True
@@ -85,15 +86,17 @@ def nested():
     auth.set_access_token(access_token, access_token_secret)
     stream = Stream(auth, l, tweet_mode='extended')
    
-    stream.filter(track=['asels'], is_async=True)
+    stream.filter(track=['asels','gerel','bist'], is_async=True)
     
    
 def posTweet(tweets):
     tweetList=[]
     for tweet in tweets:
-        if tweet.pub_date.strftime("%d")==timezone.now().strftime("%d"):
-            OKlist = ('günler','güzel','hayrola','yükşeliş','paragirişi','PARAGİRİŞİ','+','yukari','alacagim','kazan','kazanir','harika')
+       
+        if tweet.pub_date.strftime("%d")!=timezone.now().strftime("%d"):
+            OKlist = ('günler','güzel','hayrola','yükşeliş','paragirişi','PARAGİRİŞİ','+','yukari','alacagim','kazan','kazanir','harika','iyi','yeşil','yemyeşil','YEŞİL')
             if any(s in tweet.tweet_text for s in OKlist):
+                print(tweet.tweet_text)
                 tweetList.append(tweet)
     return tweetList
 
@@ -102,6 +105,7 @@ def posTweet(tweets):
 def index(request): 
     nested()
     tweets=Tweet.objects.all()
+    
     posTweets=posTweet(tweets)
     hourly=[]
     for tweet in posTweets:
