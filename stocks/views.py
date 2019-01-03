@@ -86,17 +86,25 @@ def nested():
     auth.set_access_token(access_token, access_token_secret)
     stream = Stream(auth, l, tweet_mode='extended')
    
-    stream.filter(track=['asels','gerel','bist'], is_async=True)
+    stream.filter(track=['asels','gerel','bist','avod','isctr','pkart'], is_async=True)
     
    
-def posTweet(tweets):
+def posTweet(tweets,date,stock):
     tweetList=[]
     for tweet in tweets:
-       
-        if tweet.pub_date.strftime("%d")!=timezone.now().strftime("%d"):
-            OKlist = ('günler','güzel','hayrola','yükşeliş','paragirişi','PARAGİRİŞİ','+','yukari','alacagim','kazan','kazanir','harika','iyi','yeşil','yemyeşil','YEŞİL')
+        if(stock!=''):
+            low=stock.lower()
+        else:
+            low=stock
+        if(date!=''):
+            dateN=date
+        else:
+            dateN=timezone.now().strftime("%Y-%m-%d")
+        if tweet.pub_date.strftime("%Y-%m-%d")==dateN:
+            print(tweet.pub_date.strftime("%Y-%m-%d"))
+            OKlist = (stock,low,'günler','güzel','hayrola','yükşeliş','paragirişi','PARAGİRİŞİ','+','yukari','alacagim','kazan','kazanir','harika','iyi','yeşil','yemyeşil','YEŞİL','İYİ')
             if any(s in tweet.tweet_text for s in OKlist):
-                print(tweet.tweet_text)
+                    #print(tweet.tweet_text)
                 tweetList.append(tweet)
     return tweetList
 
@@ -106,22 +114,78 @@ def index(request):
     nested()
     tweets=Tweet.objects.all()
     
-    posTweets=posTweet(tweets)
+    posTweets=posTweet(tweets,'','')
     hourly=[]
     for tweet in posTweets:
         hourly.append(tweet.pub_date.strftime("%H"))
-    d = {x:hourly.count(x) for x in hourly}
-    print(d)
+    tweetData = {x:hourly.count(x) for x in hourly}
+    
+    tweetDataFinal=[]
+    
+        
+    for key in tweetData:
+        print(key)
+        data = [int(key), tweetData[key]]
+       
+        tweetDataFinal.append(data)
+       
+    
+
 
     
-            
+    
+    
+        
         #print(print(tweet.tweet_text.split()))
     template = loader.get_template("stocks/index.html")
     context = {
-        'tweets' :posTweet(tweets)
+        'tweets' :posTweets,
+        'tweetData' : tweetDataFinal
     }
     
     return HttpResponse(template.render(context, request))
+
+
+def indexQuery(request):
+    date=request.POST.get('date')
+    print(date) 
+    stock =request.POST.get('stock')
+    print(stock) 
+    nested()
+    tweets=Tweet.objects.all()
+    
+    posTweets=posTweet(tweets,date,stock)
+    hourly=[]
+    for tweet in posTweets:
+        hourly.append(tweet.pub_date.strftime("%H"))
+    tweetData = {x:hourly.count(x) for x in hourly}
+    
+    tweetDataFinal=[]
+    
+        
+    for key in tweetData:
+        print(key)
+        data = [int(key), tweetData[key]]
+       
+        tweetDataFinal.append(data)
+       
+    
+
+
+    
+    
+    
+        
+        #print(print(tweet.tweet_text.split()))
+    template = loader.get_template("stocks/index.html")
+    context = {
+        'tweets' :posTweets,
+        'tweetData' : tweetDataFinal
+    }
+    
+    return HttpResponse(template.render(context, request))
+
+    
 
 
 
