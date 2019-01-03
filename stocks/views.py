@@ -30,10 +30,10 @@ import json
 
 
 # Your credentials go here
-consumer_key = "XXdVWTaTgOkR0AHaE1SOG1fWa"
-consumer_secret = "MH7ZWKMoiSjnw0kZweLpKzTlSXjpVE27aZfuJsI8twC3Jm7VOH"
-access_token = "28985708-GTz8sReJqi039EaadKljnbxQYu6gPk4n810bCjFDa"
-access_token_secret = "J4cOQ4KZwOtyN9LUIBz2h69F56fGnWWyNV3OXLaRt0MuS"
+consumer_key = "xxx"
+consumer_secret = "xxx"
+access_token = "xxx"
+access_token_secret = "xxx"
 
 """
 The code for our listener class above goes here!
